@@ -1,0 +1,255 @@
+
+<Decryption_class>:
+    decryption_progres_bar: decryption_progres_bar
+    decryption_label_text: decryption_label_text
+    orientation: "vertical"
+    MDBoxLayout:
+        size_hint: 1, .03
+        MDLabel:
+            text: ""
+        MDIconButton:
+            icon: "window-minimize"
+            icon_size: "15dp"
+            pos_hint: {"center_y": .5}
+            on_release: app.hide_window()
+        MDIconButton:
+            icon: "close"
+            icon_size: "18dp"
+            pos_hint: {"center_y": .5}
+            on_release: app.stop()
+    MDSeparator:
+        line_width: 1
+        line_color: "#606060"
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint: 1, .06
+        MDIconButton:
+            icon: "arrow-left-bold-hexagon-outline"
+            icon_size: "25dp"
+            theme_icon_color: "Custom"
+            icon_color: "#1FA055"
+            pos_hint: {"center_y": .5}
+            on_press: app.manager.pop()
+        MDLabel:
+            md_bg_color: "#2D2A1E"
+            text: "Lock Shield"
+            halign: "center"
+            bold: True
+            #font_name: app.default_font
+            font_size: "20dp"
+            theme_text_item: "Custom"
+            color: "#1FA055"
+        MDIconButton:
+            icon: "menu"
+            icon_size: "25dp"
+            theme_icon_color: "Custom"
+            icon_color: "#1FA055"
+            pos_hint: {"center_y": .5}
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: [0, 5, 0, 10]
+        canvas.before:
+            Color:
+                rgba: (0.122, 0.627, 0.333, 1)
+            Line:
+                points: (2,2, 2,self.height-1, self.width-2,self.height-1, self.width-2,2, 2,2)
+        MDLabel:
+            text: "Choose a file or folder to be decrypted"
+            halign: "center"
+            theme_text_color: "Custom"
+            color: "#1FA055"
+            bold: True
+            size_hint: 1, .08
+            pos_hint: {"center_y": .5}
+        MDBoxLayout:
+            padding: [7, 0, 7, 0]
+            size_hint: 1, .7
+            FileChooserListView:
+                id: filechooser
+        MDBoxLayout:
+            padding: [20, 3, 20, 0]
+            size_hint: 1, .08
+            MDSeparator:
+                line_width: 1
+                line_color: "#1FA055"
+                pos_hint: {"center_y": .5}
+        MDBoxLayout:
+            orientation: "horizontal"
+            size_hint: 1, .1
+            padding: [7, 0, 7, 0]
+            MDLabel:
+                text: "Decrypt only one single file"
+                halign: "center"
+                bold: True
+                theme_text_color: "Custom"
+                color: "#1FA055"
+            CheckBox:
+                value: "file"
+                group: "decryption_group"
+                active: True
+                size_hint: .5, 1
+                on_active: root.Decryption_data(self) if self.active == True else ""
+            MDLabel:
+                text: "Decrypt the entire folder"
+                bold: True
+                halign: "center"
+                theme_text_color: "Custom"
+                color: "#1FA055"
+            CheckBox:
+                value: "folder"
+                group: "decryption_group"
+                size_hint: .5, 1
+                on_active: root.Decryption_data(self) if self.active == True else ""
+        MDBoxLayout:
+            size_hint: 1, .2
+            padding: [5, 0, 0, 2]
+            orientation: "horizontal"
+            MDLabel:
+                text: "Target :"
+                halign: "left"
+                bold: True
+                theme_text_color: "Custom"
+                color: "#1FA055"
+                size_hint: .1, 1
+
+            MDLabel:
+                text: str(filechooser.selection) if root.decryption_file_mode == "file" else str(filechooser.path)
+                halign: "left"
+                bold: True
+                theme_text_color: "Custom"
+                color: "#F3D617"
+        MDRaisedButton:
+            text: "Setup"
+            font_size: "16dp"
+            text_color: "white"
+            md_bg_color: "#18391E"
+            size_hint: .9, .15
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_press: root.show_decryption_setup()
+        MDLabel:
+            id: decryption_label_text
+            text: "Lock Shield"
+            halign: "center"
+            bold: True
+            font_size: 20
+            theme_text_color: "Custom"
+            color: "#F3D617"
+            size_hint: 1, .4
+
+        Decryption_bar:
+            size_hint: .6, .13
+            pos_hint: {"center_x": .5, "center_y": .5}
+            opacity: int(root.decryption_progress_bar_opacity)
+            MDBoxLayout:
+                orientation: "horizontal"
+                padding: [0,0,15,0]
+                MDLabel:
+                    text: "Decryption completed" if decryption_label_text.text == "Decryption completed" else ""  "Decryption eroor" if decryption_label_text.text == "Wrong decryption key, please try again!"  else "Decryption in progress...//"
+                    halign: "center"
+                    valign: "center"
+                    bold: True
+                    size_hint: .5, .9
+                    theme_text_color: "Custom"
+                    color: "#1FA055" if decryption_label_text.text != "Wrong decryption key, please try again!" else "red"
+                MDProgressBar:
+                    id: decryption_progres_bar
+                    min: 0
+                    max: 0
+                    value: 0
+                    size_hint: 1, .20
+                    color: "#1FA055" if decryption_label_text.text != "Wrong decryption key, please try again!" else "red"
+                    pos_hint: {"x": .5, "center_y": .5}
+        MDRectangleFlatButton:
+            text: "Launch Decryption"
+            font_size: "16dp"
+            text_color: "white"
+            line_color: "#9D3E0C"
+            md_bg_color: "#9D3E0C"
+            size_hint: .3, .11
+            pos_hint: {"center_x": .5, "center_y": .5}
+            disabled: root.disabled_decryption_button
+            on_press: root.start_decryption(filechooser) if self.text == "Launch Decryption" else ""
+
+
+
+<Popup_decryption_content>:
+    orientation: "vertical"
+    MDLabel:
+        text: "Enter the decryption key"
+        halign: "center"
+        bold: True
+        theme_text_color: "Custom"
+        color: "#1FA055"
+        size_hint: 1, .1
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: [2, 5, 2, 2]
+        MDTextField:
+            id: decryption_key
+            hint_text: "Write the decryption key here"
+            multiline: False
+            mode: "rectangle"
+            size_hint_x: .8
+            password: root.show_decryption_password
+            icon_left: "key-variant"
+            pos_hint: {"center_x": .5}
+        MDBoxLayout:
+            orientation: "horizontal"
+            padding: [430, 0, 20, 0]
+            size_hint: 1, .1
+            CheckBox:
+                active: False
+                size_hint: .07, 1
+                on_active: root.show_decryption_key(self)
+            MDLabel:
+                text: "Show decryption key"
+                bold: True
+                halign: "left"
+                theme_text_color: "Custom"
+                color: "#1FA055"
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        padding: [10, 3, 10, 3]
+        spacing: 4
+        size_hint: 1, .19
+        MDRaisedButton:
+            text: "Cancel"
+            text_theme_color: "Custom"
+            text_color: "white"
+            md_bg_color: "#1FA055"
+            size_hint: .5, 1
+            on_press:
+                root.restart_decryption_setup()
+                self.parent.parent.parent.parent.parent.dismiss()
+        MDRaisedButton:
+            text: "OK"
+            text_theme_color: "Custom"
+            text_color: "white"
+            md_bg_color: "#1FA055"
+            size_hint: .5, 1
+            on_press:
+                root.save_decryption_setup(decryption_key)
+                self.parent.parent.parent.parent.parent.dismiss()
+
+<Alert_Popup_decryption_content>:
+    orientation: "horizontal"
+    padding: [20, 0, 20, 0]
+    MDIcon:
+        icon: "alert"
+        theme_icon_color: "Custom"
+        color: "red"
+        pos_hint: {"center_y": .6}
+    MDLabel:
+        text: str(root.popup_text) #"Error, you must specify the encryption key or the target file before \nlaunching the encryption"
+        bold: True
+        halign: "center"
+        theme_text_color: "Custom"
+        color: "red"
+
+<Decryption_bar@RelativeLayout>:
+    canvas:
+        Color:
+            rgba: (0.122, 0.627, 0.333, 1)
+        Line:
+            points: (6,6, 6,self.height-6, self.width-6,self.height-6, self.width-6,6, 6,6)

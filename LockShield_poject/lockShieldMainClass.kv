@@ -1,0 +1,88 @@
+#: import get_color_from_hex kivy.utils.get_color_from_hex
+#: import screen_manager_class screen_manager_class
+#: import encryption_main_file encryption_main_file
+#: import decryption_main_file decryption_main_file
+
+<screen_manager>:
+    Screen:
+        name: "default_screen"
+        canvas.before:
+            Color:
+                rgba: (0.122, 0.627, 0.333, .05)
+            Triangle:
+                points: (0,self.height, self.width/2,self.height/2, 0,0)
+            Triangle:
+                points: (self.width,0, self.width/2,self.height/2, self.width,self.height)
+        MDLabel:
+            text: "Lock Shield"
+            halign: "center"
+            theme_text_color: "Custom"
+            color: "#1FA055"
+            font_size: 70
+            font_name: app.default_font
+        Label:
+            text: "created by isaac bumizi"
+            font_size: 8
+            pos_hint: {"center_x": .03, "center_y": .95}
+
+        MDBoxLayout:
+            orientation: "vertical"
+            MDBoxLayout:
+                size_hint: 1, .04
+                MDIconButton:
+                    icon: "key-variant"
+                    icon_size: "15dp"
+                    pos_hint: {"center_y": .5}
+                MDLabel:
+                    text: "Lock Shield"
+                    bold: True
+                    text_theme_color: "Custom"
+                    color: "#1FA055"
+                    halign: "center"
+                MDIconButton:
+                    icon: "window-minimize"
+                    icon_size: "15dp"
+                    pos_hint: {"center_y": .5}
+                    on_release: app.hide_window()
+                MDIconButton:
+                    icon: "close"
+                    icon_size: "18dp"
+                    pos_hint: {"center_y": .5}
+                    on_release: app.stop()
+            MDSeparator:
+                line_width: 1
+                line_color: "#606060"
+            MDRelativeLayout:
+                MDBoxLayout:
+                    size_hint: 1, .11
+                    padding: [5, 0, 5, 8]
+                    spacing: 4
+                    pos_hint: {"center_y": .05}
+                    MDRectangleFlatIconButton:
+                        text: "Encrypt"
+                        font_size: "17dp"
+                        icon: "file-lock"
+                        icon_size: "30dp"
+                        size_hint: 1, 1
+                        text_color: "#1FA055"
+                        line_color: "#1FA055"
+                        icon_color: "#1FA055"
+                        on_press: app.manager.push("encryption_screen")
+                    MDRectangleFlatIconButton:
+                        text: "Decrypt"
+                        font_size: "18dp"
+                        icon: "file-lock-open"
+                        icon_size: "30dp"
+                        text_color: "#1FA055"
+                        line_color: "#1FA055"
+                        icon_color: "#1FA055"
+                        size_hint: 1, 1
+                        on_press: app.manager.push("decryption_screen")
+
+    Screen:
+        name: "encryption_screen"
+        Encryption_class
+
+    Screen:
+        name: "decryption_screen"
+        Decryption_class
