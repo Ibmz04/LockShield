@@ -20,11 +20,12 @@ Contributions are welcome! Feel free to open an issue or submit a pull request
 
 #preview
 
-![1](/ph/1.png)
-![1](/ph/2.png)
-![1](/ph/3.png)
-![1](/ph/5.png)
-![1](/ph/4.png)
+![preview1](/ph/1.png)
+![preview2](/ph/2.png)
+![preview3](/ph/3.png)
+![preview4](/ph/5.png)
+![preview5](/ph/4.png)
+![preview6](/ph/6.png)
 #Author
 
 Isaac Bumizi(isaacbumizi04@gmai.com)
